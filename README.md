@@ -4,6 +4,9 @@ A Simple Image downloader for [Reddit](https://reddit.com)
 
 **Important:** The project is still under development
 
+##Found a bug?
+Please create an [issue](https://github.com/Aniel/RedditImageDownloader/issues)
+
 ##Dependencies
 - [RedditSharp](https://github.com/Aniel/RedditSharp)
 
