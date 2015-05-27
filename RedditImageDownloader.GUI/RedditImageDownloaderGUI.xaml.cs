@@ -38,27 +38,6 @@ namespace RedditImageDownloader.GUI
             setPath();
         }
 
-        private void StartDownloadButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Init downloader
-            var Downloader = new Downloader.RedditImageDownloader(Path, Prefix, CurrentSubreddit, Catogory, NumberOfImages);
-
-            StartDownloadButton.Content = "Downloading";
-            setIsButtonsEnabled(false);
-
-            Log.Items.Add("Download started");
-
-
-            //Downlaod images
-            Downloader.SaveImages();
-
-            Log.Items.Add("Download completed");
-            Log.Items.Add("--------------------------------");
-
-            StartDownloadButton.Content = "Download";
-            setIsButtonsEnabled(true);
-        }
-
         private async void StartDownloadAsyncButton_OnClick(object sender, RoutedEventArgs e)
         {
             //Init downloader
@@ -119,7 +98,6 @@ namespace RedditImageDownloader.GUI
         private void setIsButtonsEnabled(bool value)
         {
             StartDownloadAsyncButton.IsEnabled = value;
-            StartDownloadButton.IsEnabled = value;
         }
 
         private void TextBoxNumberOfItems_LostFocus(object sender, RoutedEventArgs e)
