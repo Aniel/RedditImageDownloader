@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RedditImageDownloader.GUI"
         xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="RedditImageDownloader" Height="400" Width="400">
+        Title="RedditImageDownloader" Height="400" Width="400"
+                      Closing="MetroWindow_Closing">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,14 +31,14 @@
                 <WrapPanel Margin="5,5,5,5">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Subreddit:</TextBlock>
                     <TextBox Name="TextBoxSubreddit" Margin="10,0,0,0" Width="100" TextChanged="TextBoxSubreddit_TextChanged"></TextBox>
-                    <Button Name="CheckSubredditButtonOk" Visibility="Hidden">
+                    <Button Name="ButtonCheckSubredditIsOkay" Visibility="Hidden">
                         <Rectangle Fill="Green" Width="15" Height="15">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Visual="{StaticResource appbar_check}"/>
                             </Rectangle.OpacityMask>
                         </Rectangle>
                     </Button>
-                    <Button Margin="-25,0,0,0"  Name="CheckSubredditButtonNotOk" Visibility="Visible" Click="CheckSubredditButtonNotOk_Click">
+                    <Button Margin="-25,0,0,0"  Name="ButtonCheckSubredditIsNotOkay" Visibility="Visible" Click="ButtonCheckSubredditIsNotOkay_Click">
                         <Rectangle Fill="Red" Width="15" Height="15">
                             <Rectangle.OpacityMask>
                                 <VisualBrush Visual="{StaticResource appbar_close}"/>

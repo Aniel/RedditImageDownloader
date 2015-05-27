@@ -22,7 +22,7 @@ namespace RedditImageDownloader.GUI
     /// </summary>
     public partial class RedditImageDownloaderGUI : MetroWindow
     {
-        public string CurrentSubreddit = "r/earthporn";
+        public string Subreddit = "r/earthporn";
         private string Path = System.Windows.Forms.Application.StartupPath;
         private string Prefix = "Downloader";
         private int NumberOfImages = 10;
@@ -31,6 +31,7 @@ namespace RedditImageDownloader.GUI
         public RedditImageDownloaderGUI()
         {
             InitializeComponent();
+            LoadSettings();
             setNumberOfPosts();
             setSubreddit();
             setPrefix();
@@ -41,7 +42,7 @@ namespace RedditImageDownloader.GUI
         private async void StartDownloadAsyncButton_OnClick(object sender, RoutedEventArgs e)
         {
             //Init downloader
-            var downloader = new Downloader.RedditImageDownloader(Path, Prefix, CurrentSubreddit, Catogory, NumberOfImages);
+            var downloader = new Downloader.RedditImageDownloader(Path, Prefix, Subreddit, Catogory, NumberOfImages);
 
             //Subscribe to the status update eventn
             downloader.DownloadProgressChangedEvent += DownloaderOnDownloadProgressChanged;
@@ -67,7 +68,6 @@ namespace RedditImageDownloader.GUI
             StartDownloadAsyncButton.Content = "Download Async";
 
             setIsButtonsEnabled(true);
-
         }
 
         #region DownloaderOnEventHandler
@@ -119,11 +119,20 @@ namespace RedditImageDownloader.GUI
             }
             TextBoxNumberOfItems.Text = newNumber.ToString();
             NumberOfImages = newNumber;
+            Properties.Settings.Default.NumberOfImages = NumberOfImages;
+            Properties.Settings.Default.Save();
         }
 
         private void setSubreddit()
         {
-            TextBoxSubreddit.Text = CurrentSubreddit;
+            if (!string.IsNullOrEmpty(TextBoxPrefix.Text.Trim()))
+            {
+                Subreddit = TextBoxSubreddit.Text;
+            }
+            else
+            {
+                TextBoxSubreddit.Text = Subreddit;
+            }
         }
 
         private void setPath()
@@ -135,33 +144,14 @@ namespace RedditImageDownloader.GUI
 
         private void setCatorogy()
         {
-            switch (Catogory)
-            {
-                case Downloader.RedditImageDownloader.Catogory.UnmoderatedLinks:
-                    ComboboxCatogory.SelectedIndex = 0;
-                    break;
-                case Downloader.RedditImageDownloader.Catogory.Posts:
-                    ComboboxCatogory.SelectedIndex = 1;
-
-                    break;
-                case Downloader.RedditImageDownloader.Catogory.Hot:
-                    ComboboxCatogory.SelectedIndex = 2;
-
-                    break;
-                case Downloader.RedditImageDownloader.Catogory.New:
-                    ComboboxCatogory.SelectedIndex = 3;
-
-                    break;
-                default:
-                    break;
-            }
+            ComboboxCatogory.SelectedIndex = (int)Catogory;
         }
 
         private void setPrefix()
         {
             if (!string.IsNullOrEmpty(TextBoxPrefix.Text.Trim()))
             {
-                Prefix = TextBoxSubreddit.Text;
+                Prefix = TextBoxPrefix.Text;
             }
             else
             {
@@ -181,23 +171,7 @@ namespace RedditImageDownloader.GUI
 
         private void ComboboxCatogory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (ComboboxCatogory.SelectedIndex)
-            {
-                case 0:
-                    Catogory = Downloader.RedditImageDownloader.Catogory.UnmoderatedLinks;
-                    break;
-                case 1:
-                    Catogory = Downloader.RedditImageDownloader.Catogory.Posts;
-                    break;
-                case 2:
-                    Catogory = Downloader.RedditImageDownloader.Catogory.Hot;
-                    break;
-                case 3:
-                    Catogory = Downloader.RedditImageDownloader.Catogory.New;
-                    break;
-                default:
-                    break;
-            }
+            Catogory = (Downloader.RedditImageDownloader.Catogory)ComboboxCatogory.SelectedIndex;
         }
 
         private void TextBoxPath_LostFocus(object sender, RoutedEventArgs e)
@@ -223,34 +197,46 @@ namespace RedditImageDownloader.GUI
             }
         }
 
-        private void CheckSubredditButtonNotOk_Click(object sender, RoutedEventArgs e)
+        private void ButtonCheckSubredditIsNotOkay_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 if (!string.IsNullOrEmpty(TextBoxSubreddit.Text))
                 {
-                    CurrentSubreddit = TextBoxSubreddit.Text;
+                    Subreddit = TextBoxSubreddit.Text;
                     var check = new RedditSharp.Reddit();
-                    var sub = check.GetSubreddit(CurrentSubreddit);
-                    CheckSubredditButtonOk.Visibility = Visibility.Visible;
-                    CheckSubredditButtonNotOk.Visibility = Visibility.Hidden;
+                    var sub = check.GetSubreddit(Subreddit);
+                    ToggleButtonSubredditCheck();
                     setIsButtonsEnabled(true);
                     setSubreddit();
                 }
             }
             catch (Exception)
             {
-                CheckSubredditButtonOk.Visibility = Visibility.Hidden;
-                CheckSubredditButtonNotOk.Visibility = Visibility.Visible;
+                ToggleButtonSubredditCheck();
                 setIsButtonsEnabled(false);
             }
+        }
+
+        private void ToggleButtonSubredditCheck()
+        {
+            if (ButtonCheckSubredditIsOkay.Visibility == Visibility.Hidden)
+                ButtonCheckSubredditIsOkay.Visibility = Visibility.Visible;
+            else
+                ButtonCheckSubredditIsOkay.Visibility = Visibility.Hidden;
+
+            if (ButtonCheckSubredditIsNotOkay.Visibility == Visibility.Hidden)
+                ButtonCheckSubredditIsNotOkay.Visibility = Visibility.Visible;
+            else
+                ButtonCheckSubredditIsNotOkay.Visibility = Visibility.Hidden;
+
         }
 
         private void TextBoxSubreddit_TextChanged(object sender, TextChangedEventArgs e)
         {
             setIsButtonsEnabled(false);
-            CheckSubredditButtonOk.Visibility = Visibility.Hidden;
-            CheckSubredditButtonNotOk.Visibility = Visibility.Visible;
+            ButtonCheckSubredditIsOkay.Visibility = Visibility.Hidden;
+            ButtonCheckSubredditIsNotOkay.Visibility = Visibility.Visible;
         }
 
         private void ButtonClearLog_Click(object sender, RoutedEventArgs e)
@@ -258,5 +244,30 @@ namespace RedditImageDownloader.GUI
             Log.Items.Clear();
         }
         #endregion
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            SaveSettings();
+        }
+
+        private void SaveSettings()
+        {
+            Properties.Settings.Default.Subreddit = Subreddit;
+            Properties.Settings.Default.NumberOfImages = NumberOfImages;
+            Properties.Settings.Default.Prefix = Prefix;
+            Properties.Settings.Default.Path = Path;
+            Properties.Settings.Default.Catogory = (int)Catogory;
+            Properties.Settings.Default.Save();
+        }
+
+        private void LoadSettings()
+        {
+            Subreddit = Properties.Settings.Default.Subreddit;
+            NumberOfImages = Properties.Settings.Default.NumberOfImages;
+            Prefix = Properties.Settings.Default.Prefix;
+            Path = Properties.Settings.Default.Path;
+            Catogory = (Downloader.RedditImageDownloader.Catogory)Properties.Settings.Default.Catogory;
+
+        }
     }
 }
