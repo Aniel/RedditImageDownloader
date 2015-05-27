@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/aniel/redditimagedownloader.png?label=ready&title=Ready)](https://waffle.io/aniel/redditimagedownloader)
 # RedditImageDownloader
 A Simple Image downloader for [Reddit](https://reddit.com)
 
@@ -8,7 +9,7 @@ A Simple Image downloader for [Reddit](https://reddit.com)
 
 ##Usage
 1. Clone the repository
-2. Opne the soulution with Visual Studio
+2. Opne the solution with Visual Studio
 3. Clone [RedditSharp](https://github.com/Aniel/RedditSharp)
 4. Add the Redditsharp Solution as Dependency
 5. Compile All (Ctrl + Shift + B)
