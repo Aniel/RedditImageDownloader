@@ -121,7 +121,7 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RedditImageDownloader\RedditImageDownloader.Downloader.csproj">
+    <ProjectReference Include="..\RedditImageDownloader.Downloader\RedditImageDownloader.Downloader.csproj">
       <Project>{9bf93c42-5b6b-4fc0-98bb-617bd1979e42}</Project>
       <Name>RedditImageDownloader.Downloader</Name>
     </ProjectReference>
