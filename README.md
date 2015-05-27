@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/aniel/redditimagedownloader.png?label=ready&title=Ready)](https://waffle.io/aniel/redditimagedownloader)
 # RedditImageDownloader
 A Simple Image downloader for [Reddit](https://reddit.com)
 
