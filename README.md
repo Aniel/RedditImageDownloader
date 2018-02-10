@@ -5,7 +5,7 @@ A Simple Image downloader for [Reddit](https://reddit.com)
 Please create an [issue](https://github.com/Aniel/RedditImageDownloader/issues)
 
 ## Dependencies
-- [RedditSharp](https://github.com/Aniel/RedditSharp)
+- [RedditSharp](https://github.com/CrustyJew/RedditSharp)
 
 ## Usage
 1. Clone the repository
